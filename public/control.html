@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample controller</title>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+
+    <link href="css/main.css" type="text/css" rel="stylesheet">
+
+    <script src="js/const.js"></script>
+    <script src="js/main.js"></script>
+
+    <script src="lib/ove-sdk.js"></script>
+</head>
+<body>
+    <script>
+        observatory().cleanSpace().done(function () {
+           observatory().images().create("");
+        });
+
+        observatory().cleanSpace().done(function () {
+            observatory().html().create("");
+        });
+    </script>
+</body>
+</html>

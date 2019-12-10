@@ -1,0 +1,25 @@
+{
+  "name": "ovejs-client-sdk",
+  "version": "1.0.0",
+  "description": "A simple client SDK for OVE",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oserban/ovejs-client-sdk.git"
+  },
+  "author": "Ovidiu Serban, o.serban@imperial.ac.uk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/oserban/ovejs-client-sdk/issues"
+  },
+  "homepage": "https://github.com/oserban/ovejs-client-sdk#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.1"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "path": "^0.12.7"
+  }
+}
