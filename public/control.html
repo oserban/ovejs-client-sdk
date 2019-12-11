@@ -17,15 +17,26 @@
 </head>
 <body>
     <script>
-        observatory().cleanSpace().done(function () {
-           observatory().images().create("");
-        });
+        // observatory().cleanSpace().done(function () {
+        //    observatory().images().create("https://upload.wikimedia.org/wikipedia/commons/8/88/Ward_Cunningham_-_Commons-1.jpg");
+        // });
 
-        observatory().cleanSpace().done(function () {
-            observatory().html().create("");
-        });
+        let counter = 1;
 
-        observatory().delete();
+
+        function createThis() {
+            observatory().cleanSpace().done(function () {
+                region(10000, 0, 300, 300).images().create("https://upload.wikimedia.org/wikipedia/commons/8/88/Ward_Cunningham_-_Commons-1.jpg");
+            });
+        }
+
+        // observatory().cleanSpace().done(function () {
+        //     observatory().html().create("");
+        // });
+        //
+        // observatory().delete();
     </script>
+
+    <button onclick="createThis()">Add</button>
 </body>
 </html>
