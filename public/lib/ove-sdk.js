@@ -36,7 +36,8 @@ function region(x, y, w, h) {
         background: _background,
         cleanSpace: _cleanSpace,
         html: _html,
-        images: _images
+        images: _images,
+        delete: _delete
     };
 }
 
@@ -94,7 +95,7 @@ function _create(url = "") {
 
     console.log("Creating section url =", url, " app =", this.app);
 
-    return _ajax_post({
+    return _ajax_post("/section", {
         "space": OVE_SPACE,
         "h": this.regionBox.h, "w": this.regionBox.w, "x": this.regionBox.x, "y": this.regionBox.y,
         "app": {"url": this.app, "states": {"load": {"url": url}}}
@@ -105,10 +106,20 @@ function _update(url = "") {
     _validateRegion.bind(this)();
     _validateApp.bind(this)();
 
-    return _ajax_post({
-        "space": OVE_SPACE,
-        "h": this.regionBox.h, "w": this.regionBox.w, "x": this.regionBox.x, "y": this.regionBox.y,
-        "app": {"url": this.app, "states": {"load": {"url": url}}}
+    return _query_sections(this.regionBox).done(function (sections) {
+        sections.forEach(section => {
+            _ajax_post(`/sections/${section}`, {"app": {"url": this.app, "states": {"load": {"url": url}}}})
+        });
+    });
+}
+
+function _delete() {
+    _validateRegion.bind(this)();
+
+    return _query_sections(this.regionBox).done(function (sections) {
+        sections.forEach(section => {
+            _ajax_delete(`/sections/${section}`)
+        });
     });
 }
 
@@ -126,13 +137,54 @@ function _validateApp() {
     }
 }
 
-function _ajax_post(data) {
+function _ajax_post(api, data) {
     autoconfig();
+
+    if (OVE_DEBUG) {
+        console.debug("Posting to", api, data)
+    }
 
     return $.ajax({
         type: 'POST',
-        url: `${OVE_CORE}/section`,
-        data: JSON.stringify(data),
+        url: `${OVE_CORE}${api}`,
+        data: data ? JSON.stringify(data) : null,
         contentType: 'application/json'
     });
+}
+
+function _ajax_delete(api, data) {
+    autoconfig();
+
+    if (OVE_DEBUG) {
+        console.debug("Posting to", api, data)
+    }
+
+    return $.ajax({
+        type: 'DELETE',
+        url: `${OVE_CORE}${api}`,
+        data: data ? JSON.stringify(data) : null,
+        contentType: 'application/json'
+    });
+}
+
+function _ajax_get(api, data) {
+    autoconfig();
+
+    if (OVE_DEBUG) {
+        console.debug("Getting from", api, data)
+    }
+
+    return $.ajax({
+        type: 'GET',
+        url: `${OVE_CORE}${api}`,
+        data: data ? JSON.stringify(data) : null,
+        contentType: 'application/json'
+    });
+}
+
+function _query_sections(box) {
+    return _ajax_get("/sections", {"geometry": `${box.x},${box.y},${box.w},${box.h}`})
+        .then(function (data) {
+            return data.map(item => item.id);
+        });
 }
